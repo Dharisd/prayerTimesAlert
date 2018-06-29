@@ -34,11 +34,15 @@ def find_closest():
     today = date.today()
     c_time = datetime.datetime.now()
     print(c_time)
-    closest = min([ i for i in timearray if datetime.datetime.combine(today,datetime.datetime.strptime(i, "%H:%M").time())  >= c_time], key=lambda t: abs(c_time - datetime.datetime.combine(today,datetime.datetime.strptime(t, "%H:%M").time()) ))
-    prayerindex = timearray.index(closest)
-    prayername = timekeys[prayerindex]
-    diff = datetime.datetime.combine(today,datetime.datetime.strptime(closest, "%H:%M").time()) - c_time
-    return diff.seconds,prayername
+    try:
+        closest = min([ i for i in timearray if datetime.datetime.combine(today,datetime.datetime.strptime(i, "%H:%M").time())  >= c_time], key=lambda t: abs(c_time - datetime.datetime.combine(today,datetime.datetime.strptime(t, "%H:%M").time()) ))
+        prayerindex = timearray.index(closest)
+        prayername = timekeys[prayerindex]
+        diff = datetime.datetime.combine(today,datetime.datetime.strptime(closest, "%H:%M").time()) - c_time
+        return diff.seconds,prayername
+    except:
+        print("exception")
+        return(999,"")
     
 
 
@@ -47,7 +51,6 @@ def find_closest():
 while 1==1:
     time.sleep(60)
     closest_prayer = find_closest()
-    c = 10
     if closest_prayer[0] <= 120:
         toaster = ToastNotifier()
         toaster.show_toast("Prayer Alert",
